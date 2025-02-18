@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Community</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        :root {
+            --primary-color: #333;
+            --secondary-color: #666;
+            --border-color: #ddd;
+            --background-light: #f5f5f5;
+            --accent-color: #ff4757;
+        }
+
+        body {
+            background-color: var(--background-light);
+        }
+
+        .header {
+            background: white;
+            padding: 0.8rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .search-container {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 80px auto 0;
+            padding: 2rem;
+        }
+
+        .filters-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.2rem;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            background: var(--background-light);
+        }
+
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .sub-filters {
+            display: flex;
+            gap: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .sub-filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .outfit-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .outfit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .outfit-image-container {
+            position: relative;
+            padding-top: 133.33%; /* 3:4 aspect ratio */
+        }
+
+        .outfit-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .outfit-info {
+            padding: 1.2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        .username {
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .user-location {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+        }
+
+        .outfit-stats {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .outfit-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tag {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            background: var(--background-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            text-decoration: none;
+        }
+
+        .upload-btn {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 20px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .upload-btn:hover {
+            background-color: #ff3344;
+        }
+
+        .item-details {
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            line-height: 1.4;
+        }
+
+        .brand-tag {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .search-container {
+                width: 200px;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="#" class="logo">FASHION</a>
+            <div class="nav-links">
+                <a href="#">Trending</a>
+                <a href="#">New</a>
+                <a href="#">Categories</a>
+                <a href="#">Brands</a>
+                <a href="#">Shop</a>
+                <button class="upload-btn">Upload Outfit</button>
+            </div>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="search" class="search-bar" placeholder="Search outfits, items, users...">
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="filters-container">
+            <div class="filters">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Men</button>
+                <button class="filter-btn">Women</button>
+                <button class="filter-btn">Street</button>
+                <button class="filter-btn">Minimalist</button>
+                <button class="filter-btn">Casual</button>
+                <button class="filter-btn">Formal</button>
+                <button class="filter-btn">Sports</button>
+            </div>
+            <div class="sub-filters">
+                <div class="sub-filter">
+                    <i class="fas fa-sort"></i>
+                    <span>Latest</span>
+                </div>
+                <div class="sub-filter">
+                    <i class="fas fa-fire"></i>
+                    <span>Popular</span>
+                </div>
+                <div class="sub-filter">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Location</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-container">
+            <!-- Outfit Card 1 -->
+            <div class="outfit-card">
+                <div class="outfit-image-container">
+                    <img src="/api/placeholder/300/400" alt="Fashion outfit" class="outfit-image">
+                </div>
+                <div class="outfit-info">
+                    <div class="user-info">
+                        <img src="/api/placeholder/40/40" alt="User avatar" class="user-avatar">
+                        <div class="user-details">
+                            <a href="#" class="username">style_master</a>
+                            <span class="user-location">Tokyo, Japan</span>
+                        </div>
+                    </div>
+                    <div class="item-details">
+                        Wearing: <a href="#" class="brand-tag">Uniqlo</a> oversized tee, 
+                        <a href="#" class="brand-tag">Zara</a> wide-leg pants, 
+                        <a href="#" class="brand-tag">Nike</a> Air Max
+                    </div>
+                    <div class="outfit-tags">
+                        <a href="#" class="tag">#minimalist</a>
+                        <a href="#" class="tag">#streetwear</a>
+                        <a href="#" class="tag">#summer</a>
+                    </div>
+                    <div class="outfit-stats">
+                        <div class="stat">
+                            <i class="far fa-heart"></i>
+                            <span>1.2k</span>
+                        </div>
+                        <div class="stat">
+                            <i class="far fa-comment"></i>
+                            <span>45</span>
+                        </div>
+                        <div class="stat">
+                            <i class="far fa-bookmark"></i>
+                            <span>234</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outfit Card 2 -->
+            <div class="outfit-card">
+                <div class="outfit-image-container">
+                    <img src="/api/placeholder/300/400" alt="Fashion outfit" class="outfit-image">
+                </div>
+                <div class="outfit-info">
+                    <div class="user-info">
+                        <img src="/api/placeholder/40/40" alt="User avatar" class="user-avatar">
+                        <div class="user-details">
+                            <a href="#" class="username">fashion_guru</a>
+                            <span class="user-location">Seoul, Korea</span>
+                        </div>
+                    </div>
+                    <div class="item-details">
+                        Wearing: <a href="#" class="brand-tag">Muji</a> linen shirt, 
+                        <a href="#" class="brand-tag">Uniqlo</a> chinos, 
+                        <a href="#" class="brand-tag">Common Projects</a> sneakers
+                    </div>
+                    <div class="outfit-tags">
+                        <a href="#" class="tag">#casual</a>
+                        <a href="#" class="tag">#minimal</a>
+                        <a href="#" class="tag">#menswear</a>
+                    </div>
+                    <div class="outfit-stats">
+                        <div class="stat">
+                            <i class="far fa-heart"></i>
+                            <span>958</span>
+                        </div>
+                        <div class="stat">
+                            <i class="far fa-comment"></i>
+                            <span>32</span>
+                        </div>
+                        <div class="stat">
+                            <i class="far fa-bookmark"></i>
+                            <span>187</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional outfit cards with the same structure -->
+        </div>
+    </main>
+
+    <script>
+        // Filter buttons interaction
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        // Sub-filters interaction
+        const subFilters = document.querySelectorAll('.sub-filter');
+        
+        subFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                subFilters.forEach(f => f.style.color = 'var(--secondary-color)');
+                filter.style.color = 'var(--accent-color)';
+            });
+        });
+
+        // Simulate loading more content on scroll
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
+                // In a real application, this would trigger an API call to load more content
+                console.log('Loading more content...');
+            }
+        });
+    </script>
+</body>
+</html>
